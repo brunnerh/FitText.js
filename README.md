@@ -1,4 +1,4 @@
-# FitText.js, a <del>jQuery plugin</del> tiny script for inflating web type
+# FitText.js, a <del>jQuery plugin</del> quite tiny script for inflating web type
 FitText makes font-sizes flexible. Use this <del>plugin</del> script on your fluid or responsive layout to achieve scalable headlines that fill the width of a parent element.
 
 ## How it works
@@ -15,6 +15,10 @@ window.fitText( document.getElementById("responsive_headline"), 1.2 ); // turn t
 window.fitText( document.getElementById("responsive_headline"), 0.8 ); // turn the compressor down (font will shrink less aggressively)
 ``` 
 This will hopefully give you a level of "control" that might not be pixel perfect, but scales smoothly & nicely.
+
+### Removing the Sizing
+
+The function `fitText` returns a cancellation token. Call `cancel()` on it to unsubscribe from all events and cancel update intervals.
 
 ### Thanks
 Thanks to Trent, Dave and Reagan for original FitText.js: https://github.com/davatron5000/FitText.js
