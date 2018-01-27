@@ -1,0 +1,14 @@
+{
+	"name": "fit-text",
+	"description": "Fits text content to element size.",
+	"version": "1.1.0",
+	"main": "pathToMain",
+	"license": "wtfpl",
+	"dependencies": {},
+	"devDependencies": {
+		"uglify-js-es6": "2.8.9"
+	},
+	"scripts": {
+		"postinstall": "uglifyjs fittext.js -c -m -o fittext.min.js"
+	}
+}

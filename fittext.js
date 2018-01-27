@@ -37,39 +37,39 @@
 
   /**
    * Adds an event listener.
-   * @param {EventTarget} el The element on which to add the listener.
+   * @param {EventTarget} element The element on which to add the listener.
    * @param {string} type The type of the event.
-   * @param {EventListenerOrEventListenerObject} fn The event callback.
+   * @param {EventListenerOrEventListenerObject} listener The event listener or listener object.
    * @param {boolean | AddEventListenerOptions} options Event listener options.
    * @returns {CancellationToken} A cancellation token.
    */
-  const addEvent = (el, type, fn, options = false) =>
+  const addEvent = (element, type, listener, options = false) =>
   {
-    el.addEventListener(type, fn, options);
+    element.addEventListener(type, listener, options);
 
-    return new CancellationToken(() => el.removeEventListener(type, fn, options));
+    return new CancellationToken(() => element.removeEventListener(type, listener, options));
   }
 
-  const extend = function (obj, ext)
+  const extend = function (target, source)
   {
-    for (const key in ext)
-      if (ext.hasOwnProperty(key))
-        obj[key] = ext[key];
+    for (const key in source)
+      if (source.hasOwnProperty(key))
+        target[key] = source[key];
 
-    return obj;
+    return target;
   };
 
   /**
    * Fits the text contents of an element to the element's size.
-   * @param {HTMLElement} el The element whose text contents to resize.
-   * @param {number} kompressor A sizing factor.
-   * @param {Object} options Sizing options.
+   * @param {HTMLElement} element The element whose text contents to resize.
+   * @param {number} compressor A sizing factor. Default: 1
+   * @param {Object} options Various options.
    * @param {number=} options.minFontSize The minimal font size.
    * @param {number=} options.maxFontSize The maximal font size.
    * @param {number=} options.updateRate Sets the update rate in milliseconds if ResizeObserver is not supported. Default: 1000
    * @returns {CancellationToken} A cancellation token, which removes any event listeners.
    */
-  self['fitText'] = function (el, kompressor, options = {})
+  self['fitText'] = function (element, compressor = 1, options = {})
   {
     const settings = extend({
       minFontSize: -1 / 0,
@@ -77,13 +77,11 @@
       updateRate: 1000
     }, options);
 
-    const fit = function (/** @type {HTMLElement} */ el)
+    const fit = function (/** @type {HTMLElement} */ element)
     {
-      const compressor = kompressor || 1;
-
       const resize = function ()
       {
-        el.style.fontSize = Math.max(Math.min(el.clientWidth / (compressor * 10), parseFloat(settings.maxFontSize)), parseFloat(settings.minFontSize)) + 'px';
+        element.style.fontSize = Math.max(Math.min(element.clientWidth / (compressor * 10), parseFloat(settings.maxFontSize)), parseFloat(settings.minFontSize)) + 'px';
       };
 
       // Call once to set.
@@ -98,7 +96,7 @@
       if ('ResizeObserver' in self)
       {
         const obs = new self['ResizeObserver'](() => resize());
-        obs.observe(el);
+        obs.observe(element);
   
         tokens.push(new CancellationToken(() => obs.disconnect()));
       }
@@ -113,6 +111,6 @@
       return new CancellationToken(() => tokens.forEach(t => t.cancel()));
     };
 
-    return fit(el);
+    return fit(element);
   };
 })();
