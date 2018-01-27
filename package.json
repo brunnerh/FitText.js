@@ -1,8 +1,7 @@
 {
 	"name": "fit-text",
-	"description": "Fits text content to element size.",
+	"description": "Fits text content to element width.",
 	"version": "1.1.0",
-	"main": "pathToMain",
 	"license": "wtfpl",
 	"dependencies": {},
 	"devDependencies": {

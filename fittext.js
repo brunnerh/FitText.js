@@ -60,7 +60,7 @@
   };
 
   /**
-   * Fits the text contents of an element to the element's size.
+   * Fits the text contents of an element to the element's width.
    * @param {HTMLElement} element The element whose text contents to resize.
    * @param {number} compressor A sizing factor. Default: 1
    * @param {Object} options Various options.
