@@ -62,18 +62,19 @@
   /**
    * Fits the text contents of an element to the element's width.
    * @param {HTMLElement} element The element whose text contents to resize.
-   * @param {number} compressor A sizing factor. Default: 1
    * @param {Object} options Various options.
    * @param {number=} options.minFontSize The minimal font size.
    * @param {number=} options.maxFontSize The maximal font size.
+   * @param {number=} options.compressor A sizing factor. Larger values result in smaller text. Default: 1
    * @param {number=} options.updateRate Sets the update rate in milliseconds if ResizeObserver is not supported. Default: 1000
    * @returns {CancellationToken} A cancellation token, which removes any event listeners.
    */
-  self['fitText'] = function (element, compressor = 1, options = {})
+  self['fitText'] = function (element, options = {})
   {
     const settings = extend({
       minFontSize: -1 / 0,
       maxFontSize: 1 / 0,
+      compressor: 1,
       updateRate: 1000
     }, options);
 
@@ -81,7 +82,7 @@
     {
       const resize = function ()
       {
-        element.style.fontSize = Math.max(Math.min(element.clientWidth / (compressor * 10), parseFloat(settings.maxFontSize)), parseFloat(settings.minFontSize)) + 'px';
+        element.style.fontSize = Math.max(Math.min(element.clientWidth / (settings.compressor * 10), parseFloat(settings.maxFontSize)), parseFloat(settings.minFontSize)) + 'px';
       };
 
       // Call once to set.
