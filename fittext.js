@@ -17,6 +17,10 @@
   /** Utility class for cancelling something in a non-leaky way. */
   class CancellationToken
   {
+    /**
+     * Creates a new token.
+     * @param {() => void} callback The callback, that executes the cancellation logic.
+     */
     constructor(callback)
     {
       this._callback = callback;
@@ -46,28 +50,31 @@
     return new CancellationToken(() => el.removeEventListener(type, fn, options));
   }
 
-  var extend = function (obj, ext)
+  const extend = function (obj, ext)
   {
-    for (var key in ext)
+    for (const key in ext)
       if (ext.hasOwnProperty(key))
         obj[key] = ext[key];
+
     return obj;
   };
 
   /**
-   * 
+   * Fits the text contents of an element to the element's size.
    * @param {HTMLElement} el The element whose text contents to resize.
    * @param {number} kompressor A sizing factor.
    * @param {Object} options Sizing options.
    * @param {number=} options.minFontSize The minimal font size.
    * @param {number=} options.maxFontSize The maximal font size.
+   * @param {number=} options.updateRate Sets the update rate in milliseconds if ResizeObserver is not supported. Default: 1000
    * @returns {CancellationToken} A cancellation token, which removes any event listeners.
    */
   self['fitText'] = function (el, kompressor, options = {})
   {
     const settings = extend({
-      'minFontSize': -1 / 0,
-      'maxFontSize': 1 / 0
+      minFontSize: -1 / 0,
+      maxFontSize: 1 / 0,
+      updateRate: 1000
     }, options);
 
     const fit = function (/** @type {HTMLElement} */ el)
@@ -97,8 +104,8 @@
       }
       else
       {
-        // Slow polling update (window resize is not reliable as it does not capture internal layout changes)
-        const handle = setInterval(resize, 1000);
+        // Interval-based update (window resize is not reliable as it does not capture internal layout changes)
+        const handle = setInterval(resize, settings.updateRate);
   
         tokens.push(new CancellationToken(() => clearInterval(handle)));
       }
